@@ -3,8 +3,6 @@ import Head from 'next/head';
 import { useRouter } from 'next/router';
 import axios from 'axios';
 
-const BACKEND_URL = process.env.NEXT_PUBLIC_BACKEND_URL || (typeof window !== 'undefined' ? window.location.origin : '');
-
 export default function ChannelPage() {
   const router = useRouter();
   const { id: channelId } = router.query;
@@ -16,7 +14,7 @@ export default function ChannelPage() {
       const fetchChannelData = async () => {
         setIsLoading(true);
         try {
-          const response = await axios.get(`${BACKEND_URL}/channel?id=${channelId}`);
+          const response = await axios.get(`/api/channel?id=${channelId}`);
           setChannelData(response.data);
         } catch (error) {
           console.error('チャンネル情報の取得に失敗しました:', error);
