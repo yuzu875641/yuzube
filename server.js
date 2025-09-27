@@ -1,16 +1,22 @@
 const express = require('express');
 const axios = require('axios');
-require('dotenv').config();
 
 const app = express();
-const PORT = process.env.PORT || 3000;
+const PORT = 3000;
 
 app.use(express.json());
 
+// ★環境変数を使用しないため、URLとAPIキーを直接記述
 const INVIDIOUS_INSTANCE_URL = 'https://raw.githubusercontent.com/yuzu875641/yuzube/refs/heads/main/invidious.txt';
+const VKR_DOWNLOADER_API_KEY = 'vkrdownloader';
+const VKR_DOWNLOADER_BASE_URL = 'https://vkrdownloader.xyz/server/';
 
+// フロントエンドのURLを直接記述
+const FRONTEND_URL = 'http://localhost:3001';
+
+// CORSを許可
 app.use((req, res, next) => {
-    res.header('Access-Control-Allow-Origin', '*');
+    res.header('Access-Control-Allow-Origin', FRONTEND_URL);
     res.header('Access-Control-Allow-Methods', 'GET, POST, OPTIONS, PUT, PATCH, DELETE');
     res.header('Access-Control-Allow-Headers', 'Origin, X-Requested-With, Content-Type, Accept');
     next();
@@ -59,11 +65,11 @@ app.get('/search', async (req, res) => {
 app.get('/watch', async (req, res) => {
     const videoId = req.query.v;
     if (!videoId) {
-        return res.status(400).json({ error: '動画IDが必要です。' });
+        return res.status(400).json({ error: '動画ID（v）が必要です。' });
     }
 
     const vkrUrl = `https://www.youtube.com/watch?v=${videoId}`;
-    const apiUrl = `https://vkrdownloader.xyz/server/?api_key=vkrdownloader&vkr=${encodeURIComponent(vkrUrl)}`;
+    const apiUrl = `${VKR_DOWNLOADER_BASE_URL}?api_key=${VKR_DOWNLOADER_API_KEY}&vkr=${encodeURIComponent(vkrUrl)}`;
 
     try {
         const response = await axios.get(apiUrl);
