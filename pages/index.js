@@ -3,8 +3,6 @@ import Head from 'next/head';
 import Link from 'next/link';
 import axios from 'axios';
 
-const BACKEND_URL = process.env.NEXT_PUBLIC_BACKEND_URL || (typeof window !== 'undefined' ? window.location.origin : '');
-
 export default function Home() {
   const [query, setQuery] = useState('');
   const [results, setResults] = useState([]);
@@ -14,7 +12,7 @@ export default function Home() {
     if (!query) return;
 
     try {
-      const response = await axios.get(`${BACKEND_URL}/search?q=${encodeURIComponent(query)}`);
+      const response = await axios.get(`/api/search?q=${encodeURIComponent(query)}`);
       setResults(response.data);
     } catch (error) {
       console.error('検索に失敗しました:', error);
@@ -69,4 +67,4 @@ export default function Home() {
       </div>
     </div>
   );
-          }
+}
