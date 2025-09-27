@@ -8,8 +8,6 @@ const PORT = process.env.PORT || 3000;
 app.use(express.json());
 
 const INVIDIOUS_INSTANCE_URL = 'https://raw.githubusercontent.com/yuzu875641/yuzube/refs/heads/main/invidious.txt';
-const VKR_DOWNLOADER_API_KEY = process.env.VKR_DOWNLOADER_API_KEY;
-const VKR_DOWNLOADER_BASE_URL = 'https://vkrdownloader.xyz/server/';
 
 app.use((req, res, next) => {
     res.header('Access-Control-Allow-Origin', '*');
@@ -61,11 +59,11 @@ app.get('/search', async (req, res) => {
 app.get('/watch', async (req, res) => {
     const videoId = req.query.v;
     if (!videoId) {
-        return res.status(400).json({ error: '動画ID（v）が必要です。' });
+        return res.status(400).json({ error: '動画IDが必要です。' });
     }
 
     const vkrUrl = `https://www.youtube.com/watch?v=${videoId}`;
-    const apiUrl = `${VKR_DOWNLOADER_BASE_URL}?api_key=${VKR_DOWNLOADER_API_KEY}&vkr=${encodeURIComponent(vkrUrl)}`;
+    const apiUrl = `https://vkrdownloader.xyz/server/?api_key=vkrdownloader&vkr=${encodeURIComponent(vkrUrl)}`;
 
     try {
         const response = await axios.get(apiUrl);
